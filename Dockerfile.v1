@@ -1,0 +1,13 @@
+# VERSION 1 - the "naive" Dockerfile. It works, but it is slow to rebuild.
+# Used in the lab to feel the problem before we fix it.
+FROM python:3.12
+
+WORKDIR /app
+
+# Problem: all code is copied BEFORE dependencies are installed,
+# so every code edit invalidates the cache and pip reinstalls everything.
+COPY . .
+RUN pip install -r requirements.txt
+
+EXPOSE 8000
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:app"]
