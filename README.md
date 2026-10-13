@@ -11,7 +11,7 @@ A tiny Flask web service used in the Week 4 Docker lab and as the starting point
 ## Quick start
 
 ```bash
-git clone [repo URL]
+git clone https://github.com/mehmet-kahraman/okan-uni-ceng413.git
 cd [repo folder]
 
 # slow version first, then the improved one
