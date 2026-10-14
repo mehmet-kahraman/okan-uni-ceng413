@@ -46,6 +46,17 @@ A Git repository (or zip) containing:
 - [ ] The app follows the README: the commands work exactly as written.
 - [ ] Configuration comes from environment variables.
 
+## Grading
+
+| Part | Points |
+|---|---|
+| Image builds and runs as documented | 30 |
+| Quality checklist (pinning, order, non-root, no secrets, .dockerignore) | 30 |
+| README and screenshot | 10 |
+| Written answers | 20 |
+| Code and repository hygiene | 10 |
+| **Total** | **100** |
+
 ## Bonus (optional)
 
 - Add a unit test and run it during the build or in a separate stage.
