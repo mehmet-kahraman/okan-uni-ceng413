@@ -1,0 +1,27 @@
+# Week 5: two services that talk to each other by NAME.
+# Compose creates a network for us, so "cache" resolves to the Redis container.
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_GREETING: ${APP_GREETING:-Hello}
+      REDIS_HOST: cache
+    depends_on:
+      cache:
+        condition: service_healthy
+
+  cache:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+
+volumes:
+  redisdata:
