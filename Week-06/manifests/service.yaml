@@ -1,0 +1,11 @@
+# Service: one stable name ("web") in front of all Pods labelled app=web
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  ports:
+    - port: 80
+      targetPort: 80

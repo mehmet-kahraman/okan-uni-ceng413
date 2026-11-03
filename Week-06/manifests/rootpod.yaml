@@ -1,0 +1,10 @@
+# A Pod with default settings (runs as root inside the container)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rootpod
+spec:
+  containers:
+    - name: app
+      image: busybox:1.37
+      command: ["sleep", "3600"]

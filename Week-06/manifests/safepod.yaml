@@ -1,0 +1,20 @@
+# The same program, hardened: non-root, read-only files, no extra capabilities
+apiVersion: v1
+kind: Pod
+metadata:
+  name: safepod
+spec:
+  containers:
+    - name: app
+      image: busybox:1.37
+      command: ["sleep", "3600"]
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+        seccompProfile:
+          type: RuntimeDefault
