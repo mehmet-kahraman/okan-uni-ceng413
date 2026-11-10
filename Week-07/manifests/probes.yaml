@@ -1,0 +1,44 @@
+# Two copies of nginx behind a Service, with a readiness and a liveness probe.
+# Readiness: "may this Pod receive traffic?"  -> asks for the home page every 5 s.
+# Liveness:  "is the container alive?"        -> only checks that port 80 accepts connections.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: probeweb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: probeweb
+  template:
+    metadata:
+      labels:
+        app: probeweb
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            periodSeconds: 5
+            failureThreshold: 2
+          livenessProbe:
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: probeweb
+spec:
+  selector:
+    app: probeweb
+  ports:
+    - port: 80
+      targetPort: 80

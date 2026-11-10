@@ -1,0 +1,52 @@
+# ConfigMap + Deployment: the app reads its settings from outside the image.
+# The same ConfigMap is used twice: as environment variables and as a file.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  GREETING: "Hello from the ConfigMap"
+  LOG_LEVEL: "info"
+  index.html: |
+    <h1>Hello from the ConfigMap</h1>
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cfgweb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cfgweb
+  template:
+    metadata:
+      labels:
+        app: cfgweb
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+          env:
+            - name: GREETING            # one key as one variable
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: GREETING
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: LOG_LEVEL
+          volumeMounts:
+            - name: site
+              mountPath: /usr/share/nginx/html   # the page nginx serves
+      volumes:
+        - name: site
+          configMap:
+            name: web-config
+            items:
+              - key: index.html                  # only this key becomes a file
+                path: index.html

@@ -1,0 +1,19 @@
+# A container that tries to use 250 MB but is only allowed 100 MiB.
+# Memory over the limit -> the container is killed (OOMKilled).
+# Note: polinux/stress is the image used in the official Kubernetes memory tutorial.
+# It is a demo-only image, so we do not pin a tag here.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: memhog
+spec:
+  containers:
+    - name: stress
+      image: polinux/stress
+      command: ["stress"]
+      args: ["--vm", "1", "--vm-bytes", "250M", "--vm-hang", "1"]
+      resources:
+        requests:
+          memory: "50Mi"
+        limits:
+          memory: "100Mi"

@@ -1,0 +1,14 @@
+# A Pod that asks for far more CPU than any node has.
+# The scheduler cannot place it, so it stays Pending.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: toobig
+spec:
+  containers:
+    - name: app
+      image: nginx:1.27
+      resources:
+        requests:
+          cpu: "100"
+          memory: "64Mi"

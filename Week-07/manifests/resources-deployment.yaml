@@ -1,0 +1,27 @@
+# The "good habit": every container declares what it needs (requests) and what it may use (limits).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sizedweb
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: sizedweb
+  template:
+    metadata:
+      labels:
+        app: sizedweb
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.27
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "32Mi"
+            limits:
+              cpu: "200m"
+              memory: "64Mi"
